@@ -1,0 +1,1 @@
+## Project Diploma [![Build status](https://ci.appveyor.com/api/projects/status/0yfws1gsiu62j9im?svg=true)](https://ci.appveyor.com/project/TimurYo/diploma)
