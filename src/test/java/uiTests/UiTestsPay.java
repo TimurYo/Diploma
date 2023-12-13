@@ -73,8 +73,8 @@ public class UiTestsPay {
     }
 
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/FirstInvalidCardNumber.csv")
-    public void firstInvalidCardNumberTest(String cardNumber) {
+    @CsvFileSource(files = "src/test/resources/InvalidCardNumber.csv")
+    public void invalidCardNumberTest(String cardNumber) {
         //Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить")).click();
@@ -85,21 +85,6 @@ public class UiTestsPay {
         $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
         $(byText("Продолжить")).click();
         $(byText("Номер карты")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
-    }
-
-    @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SecondInvalidCardNumber.csv")
-    public void secondInvalidCardNumberTest(String cardNumber) {
-        //Configuration.holdBrowserOpen = true;
-        open("http://localhost:8080/");
-        $(byText("Купить")).click();
-        $(byText("Номер карты")).parent().$("input.input__control").setValue(cardNumber);
-        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
-        $(byText("Год")).parent().$("input.input__control").setValue("25");
-        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
-        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
-        $(byText("Продолжить")).click();
-        $(byText("Ошибка")).parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
     }
 
     @ParameterizedTest

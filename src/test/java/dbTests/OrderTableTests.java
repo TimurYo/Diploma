@@ -89,6 +89,26 @@ public class OrderTableTests {
         assertEquals(actual, expected);
     }
 
+    @Test
+    void orderIdTestWithCredit() {
+        cleanDB();
+
+        //Configuration.holdBrowserOpen = true;
+        open("http://localhost:8080/");
+        $(byText("Купить в кредит")).click();
+        $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
+        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
+        $(byText("Год")).parent().$("input.input__control").setValue("25");
+        $(byText("Владелец")).parent().$("input.input__control").setValue("Timur");
+        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
+        $(byText("Продолжить")).click();
+        $(byText("Успешно")).parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Операция одобрена Банком."));
+
+        var expected = getCreditEntity().getId();
+        var actual = getOrderEntity().getId();
+        assertEquals(actual, expected);
+    }
+
 
     @Test
     void orderCreditIdTestDraft() {
