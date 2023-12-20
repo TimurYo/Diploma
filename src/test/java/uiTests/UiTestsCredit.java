@@ -3,9 +3,9 @@ package uiTests;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -59,21 +59,68 @@ public class UiTestsCredit {
     }
 
     @Test
-    public void emptyFormTest() {
-        //Configuration.holdBrowserOpen = true;
+    public void emptyCardNumberField() {
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
+        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
+        $(byText("Год")).parent().$("input.input__control").setValue("25");
+        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
+        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
         $(byText("Продолжить")).click();
-        $(byText("Номер карты")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
-        $(byText("Месяц")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
-        $(byText("Год")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
-        $(byText("CVC/CVV")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
+        $(byText("Номер карты")).parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    public void emptyMonthField() {
+        open("http://localhost:8080/");
+        $(byText("Купить в кредит")).click();
+        $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
+        $(byText("Год")).parent().$("input.input__control").setValue("25");
+        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
+        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
+        $(byText("Продолжить")).click();
+        $(byText("Месяц")).parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    public void emptyYearField() {
+        open("http://localhost:8080/");
+        $(byText("Купить в кредит")).click();
+        $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
+        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
+        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
+        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
+        $(byText("Продолжить")).click();
+        $(byText("Год")).parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    public void emptyNameField() {
+        open("http://localhost:8080/");
+        $(byText("Купить в кредит")).click();
+        $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
+        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
+        $(byText("Год")).parent().$("input.input__control").setValue("23");
+        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
+        $(byText("Продолжить")).click();
         $(byText("Владелец")).parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
+    @Test
+    public void emptyCVCField() {
+        open("http://localhost:8080/");
+        $(byText("Купить в кредит")).click();
+        $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
+        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
+        $(byText("Год")).parent().$("input.input__control").setValue("23");
+        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
+        $(byText("Продолжить")).click();
+        $(byText("CVC/CVV")).parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+    }
+
     @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/FirstInvalidCardNumber.csv")
-    public void firstInvalidCardNumberTest(String cardNumber) {
+    @CsvFileSource(files = "src/test/resources/InvalidCardNumber.csv")
+    public void invalidCardNumberTest(String cardNumber) {
         //Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
@@ -84,21 +131,6 @@ public class UiTestsCredit {
         $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
         $(byText("Продолжить")).click();
         $(byText("Номер карты")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
-    }
-
-    @ParameterizedTest
-    @CsvFileSource(files = "src/test/resources/SecondInvalidCardNumber.csv")
-    public void secondInvalidCardNumberTest(String cardNumber) {
-        //Configuration.holdBrowserOpen = true;
-        open("http://localhost:8080/");
-        $(byText("Купить в кредит")).click();
-        $(byText("Номер карты")).parent().$("input.input__control").setValue(cardNumber);
-        $(byText("Месяц")).parent().$("input.input__control").setValue("12");
-        $(byText("Год")).parent().$("input.input__control").setValue("25");
-        $(byText("Владелец")).parent().$("input.input__control").setValue("Dmitry Ivanov");
-        $(byText("CVC/CVV")).parent().$("input.input__control").setValue("335");
-        $(byText("Продолжить")).click();
-        $(byText("Ошибка")).parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
     }
 
     @ParameterizedTest
