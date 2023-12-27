@@ -124,8 +124,8 @@ public class OrderTableTests {
         $(byText("Продолжить")).click();
         $(byText("Успешно")).parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Операция одобрена Банком."));
 
-        var expected = getCreditEntity().getBankId();
-        var actual = getOrderEntity().getCreditId();
+        var expected = getCreditEntity().getBank_id();
+        var actual = getOrderEntity().getCredit_id();
         assertEquals(actual, expected);
     }
 
@@ -144,7 +144,7 @@ public class OrderTableTests {
         $(byText("Успешно")).parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Операция одобрена Банком."));
 
         var expected = getPaymentEntity().getTransaction_id();
-        var actual = getOrderEntity().getPaymentId();
+        var actual = getOrderEntity().getPayment_id();
         assertEquals(actual, expected);
     }
 

@@ -1,6 +1,7 @@
 package uiTests;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.AfterAll;
@@ -31,7 +32,7 @@ public class UiTestsCredit {
     @ParameterizedTest
     @CsvFileSource(files = "src/test/resources/ValidApprovedCard.csv")
     public void validTestsWithApprovedCard(String cardNumber, String month, String year, String name, String cvc, String cssText, String cssSelector, String resultText) {
-        //Configuration.holdBrowserOpen = true;
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
         $(byText("Номер карты")).parent().$("input.input__control").setValue(cardNumber);
@@ -60,6 +61,7 @@ public class UiTestsCredit {
 
     @Test
     public void emptyCardNumberField() {
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
         $(byText("Месяц")).parent().$("input.input__control").setValue("12");
@@ -72,6 +74,7 @@ public class UiTestsCredit {
 
     @Test
     public void emptyMonthField() {
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
         $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
@@ -84,6 +87,7 @@ public class UiTestsCredit {
 
     @Test
     public void emptyYearField() {
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
         $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
@@ -108,6 +112,7 @@ public class UiTestsCredit {
 
     @Test
     public void emptyCVCField() {
+        Configuration.holdBrowserOpen = true;
         open("http://localhost:8080/");
         $(byText("Купить в кредит")).click();
         $(byText("Номер карты")).parent().$("input.input__control").setValue("4444444444444441");
@@ -190,6 +195,6 @@ public class UiTestsCredit {
         $(byText("Владелец")).parent().$("input.input__control").setValue(name);
         $(byText("CVC/CVV")).parent().$("input.input__control").setValue("999");
         $(byText("Продолжить")).click();
-        $(byText("CVC/CVV")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
+        $(byText("Владелец")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
     }
 }

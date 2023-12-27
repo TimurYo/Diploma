@@ -191,7 +191,7 @@ public class UiTestsPay {
         $(byText("Владелец")).parent().$("input.input__control").setValue(name);
         $(byText("CVC/CVV")).parent().$("input.input__control").setValue("999");
         $(byText("Продолжить")).click();
-        $(byText("CVC/CVV")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
+        $(byText("Владелец")).parent().$("span.input__sub").shouldHave(Condition.exactText("Неверный формат"));
     }
 
 

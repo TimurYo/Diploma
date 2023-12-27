@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreditTableObject {
     String id;
-    String bankId;
+    String bank_id;
     String created;
     String status;
 }

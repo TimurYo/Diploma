@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 public class OrderTableObject {
     String id;
     String created;
-    String creditId;
-    String paymentId;
+    String credit_id;
+    String payment_id;
 }
