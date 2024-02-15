@@ -1,16 +1,14 @@
 package apiTests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import helpers.ApiHelper;
+import helpers.DataHelper;
+import helpers.DbHelper;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static objects.ApiObject.*;
+import static helpers.DbHelper.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ApiTests {
@@ -24,28 +22,72 @@ public class ApiTests {
         SelenideLogger.removeListener("allure");
     }
 
-    @Test
-    public void shouldReturnStatusPayApprovedCard() {
-        var response = getGivenWithPayApprovedCard();
-        assertTrue(response.contains("APPROVED"));
-    }
+    @Nested
+    public static class ApiTestsByPay {
 
-    @Test
-    public void shouldReturnStatusPayDeclinedCard() {
-        var response = getGivenWithPayDeclinedCard();
-        assertTrue(response.contains("DECLINED"));
+        @Test
+        @DisplayName("Api tests with approved card by pay")
+        public void apiTestWithApprovedCardByPay() {
+            DbHelper.cleanDB();
+            var info = DataHelper.CardInformationModel.getValidFormApprovedCard();
+            var response = ApiHelper.getMethodForPayWay(info);
+            assertTrue(response.contains("APPROVED"));
+            var actualStatus = "APPROVED";
+            var expectedStatus = getPaymentEntity().getStatus();
+            assertEquals(expectedStatus, actualStatus);
+            var expectedAmount = "4500000";
+            var actualAmount = getPaymentEntity().getAmount();
+            assertEquals(expectedAmount, actualAmount);
+            var expectedId = getPaymentEntity().getTransaction_id();
+            var actualId = getOrderEntity().getPayment_id();
+            assertEquals(expectedId, actualId);
+        }
+        @Test
+        @DisplayName("Api tests with declined card by pay")
+        public void apiTestWithDeclinedCardByPay(){
+            DbHelper.cleanDB();
+            var info = DataHelper.CardInformationModel.getValidFormDeclinedCard();
+            var response = ApiHelper.getMethodForPayWay(info);
+            assertTrue(response.contains("DECLINED"));
+            var actualStatus = "DECLINED";
+            var expectedStatus = getPaymentEntity().getStatus();
+            assertEquals(expectedStatus, actualStatus);
+            var expectedId = getPaymentEntity().getTransaction_id();
+            var actualId = getOrderEntity().getPayment_id();
+            assertEquals(expectedId, actualId);
+        }
     }
+    @Nested
+    public static class ApiTestsByCredit {
+        @Test
+        @DisplayName("Api tests with approved card by credit")
+        public void apiTestWithApprovedCardByCredit(){
+            DbHelper.cleanDB();
+            var info = DataHelper.CardInformationModel.getValidFormApprovedCard();
+            var response = ApiHelper.getMethodForCreditWay(info);
+            assertTrue(response.contains("APPROVED"));
+            var expectedStatus = "APPROVED";
+            var actualStatus = getCreditEntity().getStatus() ;
+            assertEquals(expectedStatus, actualStatus);
+            var expectedId = getCreditEntity().getBank_id();
+            var actualId = getOrderEntity().getCredit_id();
+            assertEquals(expectedId, actualId);
 
-    @Test
-    public void shouldReturnStatusCreditApprovedCard() {
-        var response = getGivenWithCreditApprovedCard();
-        assertTrue(response.contains("APPROVED"));
+        }
+        @Test
+        @DisplayName("Api tests with declined card by credit")
+        public void apiTestWithDeclinedCardByCredit(){
+            DbHelper.cleanDB();
+            var info = DataHelper.CardInformationModel.getValidFormDeclinedCard();
+            var response = ApiHelper.getMethodForCreditWay(info);
+            assertTrue(response.contains("DECLINED"));
+            var expectedStatus = "DECLINED";
+            var actualStatus = getCreditEntity().getStatus() ;
+            assertEquals(expectedStatus, actualStatus);
+            var expectedId = getCreditEntity().getBank_id();
+            var actualId = getOrderEntity().getCredit_id();
+            assertEquals(expectedId, actualId);
+        }
+
     }
-
-    @Test
-    public void shouldReturnStatusCreditDeclinedCard() {
-        var response = getGivenWithCreditDeclinedCard();
-        assertTrue(response.contains("DECLINED"));
-    }
-
 }
