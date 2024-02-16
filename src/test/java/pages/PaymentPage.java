@@ -37,33 +37,33 @@ public class PaymentPage {
     }
 
     public static void shouldBeFailNotification() {
-        failNotification.parent().$("div.notification__content").shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
+        failNotification.parent().$("div.notification__content").shouldBe(Condition.visible, Duration.ofSeconds(30)).shouldHave(Condition.exactText("Ошибка! Банк отказал в проведении операции."));
     }
     public static void shouldBeWrongFormat() {
-        wrongFormat.shouldHave(Condition.exactText("Неверный формат"));
+        wrongFormat.shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Неверный формат"));
     }
     public static void shouldBeWrongCardTime() {
-        wrongCardTime.shouldHave(Condition.exactText("Истёк срок действия карты"));
+        wrongCardTime.shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Истёк срок действия карты"));
     }
     public static void shouldBeWrongMonthTime() {
-        wrongMonthTime.shouldHave(Condition.exactText("Неверно указан срок действия карты"));
+        wrongMonthTime.shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Неверно указан срок действия карты"));
     }
     public static void shouldBeFieldNeedToFill() {
-        fieldNeedToFill.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        fieldNeedToFill.shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
     public static void numberFieldNeedToFill(){
-        cardNumberField.parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        cardNumberField.parent().$("span.input__sub").shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
     public static void monthFieldNeedToFill(){
-        monthField.parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        monthField.parent().$("span.input__sub").shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
     public static void yearFieldNeedToFill(){
-        yearField.parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        yearField.parent().$("span.input__sub").shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
     public static void nameFieldNeedToFill(){
-        nameField.parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        nameField.parent().$("span.input__sub").shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
     public static void cvcFieldNeedToFill(){
-        cvcField.parent().$("span.input__sub").shouldHave(Condition.exactText("Поле обязательно для заполнения"));
+        cvcField.parent().$("span.input__sub").shouldBe(Condition.visible, Duration.ofSeconds(5)).shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 }

@@ -1,11 +1,9 @@
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import helpers.DataHelper;
+import helpers.DbHelper;
 import io.qameta.allure.selenide.AllureSelenide;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pages.MainPage;
 import pages.PaymentPage;
 
@@ -46,6 +44,7 @@ public class DbTimeTest {
     @Test
     @DisplayName("Time created test by pay")
     void paymentTimeCreatedTest() throws ParseException {
+        cleanDB();
         var info = DataHelper.CardInformationModel.getValidFormApprovedCard();
         open("http://localhost:8080/");
 
